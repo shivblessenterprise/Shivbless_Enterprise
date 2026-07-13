@@ -6,8 +6,7 @@ export const siteConfig: SiteConfig = {
   description:
     "Shivbless Enterprise — browse premium pooja essentials and shop securely through Meesho and Flipkart.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@shivblessenterprise.com",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919876543210",
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "shivblessenterprise@gmail.com",
   meeshoStoreUrl: "https://www.meesho.com/Shivbless89364?ms=2",
   flipkartStoreUrl:
     "https://www.flipkart.com/shivbless-enterprise-velvet-prayer-mat/p/itm75ea6ab7b86e4?pid=MATHZHQF9XGREWCA&lid=LSTMATHZHQF9XGREWCA4IYCRQ&marketplace=FLIPKART",

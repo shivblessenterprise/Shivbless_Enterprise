@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle, Shield } from "lucide-react";
+import { Mail, Shield } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { siteConfig } from "@/lib/site";
-import { externalLinkProps, getWhatsAppLink } from "@/lib/utils";
 
 export function UpdatesCTA() {
   const [email, setEmail] = useState("");
@@ -64,16 +63,11 @@ export function UpdatesCTA() {
 
             <div className="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <a
-                {...externalLinkProps(
-                  getWhatsAppLink(
-                    siteConfig.whatsapp,
-                    "Hi! I'd like product updates from Shivbless Enterprise."
-                  )
-                )}
+                href={`mailto:${siteConfig.email}?subject=${encodeURIComponent("Product updates — Shivbless Enterprise")}`}
                 className="inline-flex h-11 items-center gap-2 rounded-xl border border-ink-700 px-5 text-sm font-medium text-white transition hover:border-brand-400 hover:bg-ink-800 focus-ring"
               >
-                <MessageCircle className="h-4 w-4" />
-                WhatsApp Updates
+                <Mail className="h-4 w-4" />
+                Email Us
               </a>
               <p className="inline-flex items-center gap-1.5 text-xs text-ink-400">
                 <Shield className="h-3.5 w-3.5" />

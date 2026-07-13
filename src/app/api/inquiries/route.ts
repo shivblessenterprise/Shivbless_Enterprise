@@ -8,7 +8,6 @@ export const dynamic = "force-dynamic";
 export type Inquiry = {
   id: string;
   name: string;
-  mobile: string;
   email: string;
   product: string;
   quantity: string;
@@ -53,14 +52,13 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<Inquiry>;
     const name = String(body.name || "").trim();
-    const mobile = String(body.mobile || "").trim();
     const email = String(body.email || "").trim();
     const product = String(body.product || "").trim();
     const quantity = String(body.quantity || "").trim();
     const message = String(body.message || "").trim();
     const city = String(body.city || "").trim();
 
-    if (!name || !mobile || !email || !product || !quantity || !message) {
+    if (!name || !email || !product || !quantity || !message) {
       return NextResponse.json(
         { ok: false, error: "Required fields missing" },
         { status: 400 }
@@ -70,7 +68,6 @@ export async function POST(req: NextRequest) {
     const inquiry: Inquiry = {
       id: `inq-${Date.now()}`,
       name,
-      mobile,
       email,
       product,
       quantity,

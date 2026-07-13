@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Facebook, Instagram, Mail, MessageCircle, Youtube } from "lucide-react";
+import { Facebook, Instagram, Mail, Youtube } from "lucide-react";
 import { Logo } from "@/components/layout/Logo";
 import { siteConfig } from "@/lib/site";
-import { getWhatsAppLink, externalLinkProps } from "@/lib/utils";
+import { externalLinkProps } from "@/lib/utils";
 import { getCategoriesWithCounts } from "@/lib/products";
 
 const quickLinks = [
@@ -111,20 +111,6 @@ export function Footer() {
                 >
                   <Mail className="h-4 w-4" />
                   {siteConfig.email}
-                </a>
-              </li>
-              <li>
-                <a
-                  {...externalLinkProps(
-                    getWhatsAppLink(
-                      siteConfig.whatsapp,
-                      "Hi Shivbless Enterprise, I have a question about your products."
-                    )
-                  )}
-                  className="inline-flex items-center gap-2 text-ink-400 transition hover:text-brand-300 focus-ring rounded"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  WhatsApp
                 </a>
               </li>
             </ul>

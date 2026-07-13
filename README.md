@@ -65,8 +65,7 @@ Copy `.env.example` to `.env.local` and set:
 
 ```
 NEXT_PUBLIC_SITE_URL=https://yourdomain.com
-NEXT_PUBLIC_WHATSAPP_NUMBER=91XXXXXXXXXX
-NEXT_PUBLIC_CONTACT_EMAIL=hello@shivblessenterprise.com
+NEXT_PUBLIC_CONTACT_EMAIL=shivblessenterprise@gmail.com
 ADMIN_PASSWORD=your-secure-password
 ```
 

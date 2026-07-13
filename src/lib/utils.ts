@@ -27,12 +27,6 @@ export function slugify(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-export function getWhatsAppLink(phone: string, message?: string): string {
-  const cleaned = phone.replace(/\D/g, "");
-  const text = message ? `?text=${encodeURIComponent(message)}` : "";
-  return `https://wa.me/${cleaned}${text}`;
-}
-
 export function externalLinkProps(url: string) {
   return {
     href: url,

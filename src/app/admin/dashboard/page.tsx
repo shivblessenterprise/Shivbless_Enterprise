@@ -24,7 +24,6 @@ import type { Marketplace, Product, StockStatus } from "@/types";
 type Inquiry = {
   id: string;
   name: string;
-  mobile: string;
   email: string;
   product: string;
   quantity: string;
@@ -504,17 +503,6 @@ export default function AdminDashboardPage() {
                   </div>
 
                   <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
-                    <div>
-                      <p className="text-xs uppercase tracking-wide text-ink-400">
-                        Mobile
-                      </p>
-                      <a
-                        href={`tel:${inq.mobile}`}
-                        className="font-medium text-ink-800 hover:text-brand-700"
-                      >
-                        {inq.mobile}
-                      </a>
-                    </div>
                     <div>
                       <p className="text-xs uppercase tracking-wide text-ink-400">
                         Email

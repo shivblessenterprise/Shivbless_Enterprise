@@ -24,7 +24,6 @@ export default function ContactClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: data.get("name"),
-          mobile: data.get("mobile"),
           email: data.get("email"),
           product: data.get("product"),
           quantity: data.get("quantity"),
@@ -80,21 +79,6 @@ export default function ContactClient() {
               />
             </div>
             <div>
-              <label
-                htmlFor="mobile"
-                className="text-sm font-medium text-ink-800"
-              >
-                Mobile number *
-              </label>
-              <input
-                id="mobile"
-                name="mobile"
-                type="tel"
-                required
-                className="mt-1.5 h-11 w-full rounded-xl border border-ink-200 px-3 text-sm focus:border-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-400"
-              />
-            </div>
-            <div className="sm:col-span-2">
               <label
                 htmlFor="email"
                 className="text-sm font-medium text-ink-800"

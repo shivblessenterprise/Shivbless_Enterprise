@@ -21,7 +21,7 @@ export default function PrivacyPolicyPage() {
 
       <h2>Information we collect</h2>
       <ul>
-        <li>Contact form submissions (name, mobile, email, message)</li>
+        <li>Contact form submissions (name, email, message)</li>
         <li>Optional email for product update notifications</li>
         <li>Wishlist preferences stored locally on your device</li>
         <li>Standard analytics/technical data if analytics tools are added later</li>

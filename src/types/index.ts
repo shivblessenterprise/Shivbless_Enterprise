@@ -82,7 +82,6 @@ export interface SiteConfig {
   description: string;
   url: string;
   email: string;
-  whatsapp: string;
   meeshoStoreUrl: string;
   flipkartStoreUrl: string;
   social: {
