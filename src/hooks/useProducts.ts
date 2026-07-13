@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import {
-  applySyncedProducts,
   deleteProduct,
   loadProducts,
   resetProducts,
@@ -51,45 +50,6 @@ export function useProducts() {
       setProducts(loadProducts());
     }
     setIsReady(true);
-  }, []);
-
-  const syncFromMeesho = useCallback(async (opts?: { silent?: boolean }) => {
-    setIsSyncing(true);
-    if (!opts?.silent) setSyncMessage(null);
-    try {
-      const res = await fetch("/api/meesho/sync", { method: "POST" });
-      const data = (await res.json()) as {
-        ok: boolean;
-        products: Product[];
-        message: string;
-        version: string;
-        source: string;
-        syncedAt: string;
-        count: number;
-      };
-
-      if (!data.ok || !Array.isArray(data.products)) {
-        throw new Error(data.message || "Sync failed");
-      }
-
-      await persistServerCatalog(data.products, data.source);
-      const next = applySyncedProducts(data.products, {
-        version: data.version,
-        source: data.source,
-        syncedAt: data.syncedAt,
-      });
-      setProducts(next);
-      setSyncMessage(data.message);
-      return data;
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Could not sync Meesho products";
-      setSyncMessage(message);
-      throw error;
-    } finally {
-      setIsSyncing(false);
-      setIsReady(true);
-    }
   }, []);
 
   const importFile = useCallback(async (file: File) => {
@@ -165,7 +125,6 @@ export function useProducts() {
     save,
     remove,
     reset,
-    syncFromMeesho,
     importFile,
     saveToServer,
   };

@@ -6,7 +6,7 @@ import { Eye } from "lucide-react";
 import { MarketplaceBadge, MarketplaceButton } from "@/components/ui/MarketplaceBadge";
 import { StarRating } from "@/components/ui/StarRating";
 import { WishlistButton } from "@/components/product/WishlistButton";
-import { formatPrice, cn } from "@/lib/utils";
+import { formatPrice, cn, isAppMediaSrc } from "@/lib/utils";
 import { getCategoriesWithCounts } from "@/lib/products";
 import type { Product } from "@/types";
 
@@ -37,17 +37,14 @@ export function ProductCard({
           href={`/products/${product.slug}`}
           className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-xl bg-[#F3EFE8] sm:aspect-square sm:w-44"
         >
-                      <Image
-                        src={product.images[0]}
-                        alt={product.title}
-                        fill
-                        sizes="176px"
-                        className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
-                        unoptimized={
-                          product.images[0]?.startsWith("/uploads") ||
-                          product.images[0]?.startsWith("blob:")
-                        }
-                      />
+          <Image
+            src={product.images[0]}
+            alt={product.title}
+            fill
+            sizes="176px"
+            className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
+            unoptimized={isAppMediaSrc(product.images[0])}
+          />
           {product.badge && (
             <span className="absolute left-2 top-2 rounded-full bg-ink-900/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white">
               {product.badge}
@@ -134,10 +131,7 @@ export function ProductCard({
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
-            unoptimized={
-              product.images[0]?.startsWith("/uploads") ||
-              product.images[0]?.startsWith("blob:")
-            }
+            unoptimized={isAppMediaSrc(product.images[0])}
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/15 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         </Link>

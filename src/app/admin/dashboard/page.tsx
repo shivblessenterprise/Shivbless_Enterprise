@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { useProducts } from "@/hooks/useProducts";
 import { ADMIN_SESSION_KEY } from "@/lib/admin";
-import { calculateDiscount, formatPrice, slugify } from "@/lib/utils";
+import { calculateDiscount, formatPrice, slugify, isAppMediaSrc } from "@/lib/utils";
 import { categories } from "@/data/categories";
 import { siteConfig } from "@/lib/site";
 import type { Marketplace, Product, StockStatus } from "@/types";
@@ -606,10 +606,7 @@ export default function AdminDashboardPage() {
                           fill
                           sizes="56px"
                           className="object-cover"
-                          unoptimized={
-                            product.images[0]?.startsWith("/uploads") ||
-                            product.images[0]?.startsWith("blob:")
-                          }
+                          unoptimized={isAppMediaSrc(product.images[0])}
                         />
                       </div>
                       <div>
@@ -708,9 +705,7 @@ export default function AdminDashboardPage() {
                         alt=""
                         fill
                         className="object-cover"
-                        unoptimized={
-                          img.startsWith("/uploads") || img.startsWith("blob:")
-                        }
+                        unoptimized={isAppMediaSrc(img)}
                       />
                       <button
                         type="button"

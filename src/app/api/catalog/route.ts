@@ -1,50 +1,22 @@
-import { mkdir, readFile, writeFile } from "fs/promises";
-import path from "path";
 import { NextRequest, NextResponse } from "next/server";
-import { buildMeeshoShopProducts } from "@/data/meesho-shop-catalog";
+import { getCatalogProducts, saveCatalogProducts } from "@/lib/catalog-db";
 import type { Product } from "@/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const CATALOG_DIR = path.join(process.cwd(), "data");
-const CATALOG_FILE = path.join(CATALOG_DIR, "catalog.json");
-
-async function ensureCatalog(): Promise<Product[]> {
-  try {
-    const raw = await readFile(CATALOG_FILE, "utf8");
-    const parsed = JSON.parse(raw) as { products?: Product[] } | Product[];
-    const list = Array.isArray(parsed) ? parsed : parsed.products;
-    if (Array.isArray(list)) return list;
-  } catch {
-    // create below
-  }
-
-  const products = buildMeeshoShopProducts();
-  await mkdir(CATALOG_DIR, { recursive: true });
-  await writeFile(
-    CATALOG_FILE,
-    JSON.stringify(
-      {
-        updatedAt: new Date().toISOString(),
-        source: "meesho-shop-catalog",
-        products,
-      },
-      null,
-      2
-    ),
-    "utf8"
-  );
-  return products;
-}
-
 export async function GET() {
-  const products = await ensureCatalog();
-  return NextResponse.json({
-    ok: true,
-    count: products.length,
-    products,
-  });
+  try {
+    const products = await getCatalogProducts();
+    return NextResponse.json({
+      ok: true,
+      count: products.length,
+      products,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Catalog load failed";
+    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+  }
 }
 
 export async function PUT(req: NextRequest) {
@@ -61,25 +33,12 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    await mkdir(CATALOG_DIR, { recursive: true });
-    await writeFile(
-      CATALOG_FILE,
-      JSON.stringify(
-        {
-          updatedAt: new Date().toISOString(),
-          source: body.source || "admin",
-          products: body.products,
-        },
-        null,
-        2
-      ),
-      "utf8"
-    );
+    await saveCatalogProducts(body.products, body.source || "admin");
 
     return NextResponse.json({
       ok: true,
       count: body.products.length,
-      message: "Catalogue saved on server. Website will use these products.",
+      message: "Catalogue saved to MongoDB. Website will use these products.",
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Save failed";

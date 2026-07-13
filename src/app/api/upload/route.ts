@@ -1,6 +1,5 @@
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
 import { NextRequest, NextResponse } from "next/server";
+import { uploadBufferToGridFS } from "@/lib/media-db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -40,12 +39,10 @@ export async function POST(req: NextRequest) {
     const bytes = Buffer.from(await file.arrayBuffer());
     const ext = file.type.split("/")[1]?.replace("jpeg", "jpg") || "jpg";
     const name = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const dir = path.join(process.cwd(), "public", "uploads", "products");
-    await mkdir(dir, { recursive: true });
-    await writeFile(path.join(dir, name), bytes);
 
-    const url = `/uploads/products/${name}`;
-    return NextResponse.json({ ok: true, url });
+    const stored = await uploadBufferToGridFS(bytes, name, file.type);
+
+    return NextResponse.json({ ok: true, url: stored.url, id: stored.id });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Upload failed";
     return NextResponse.json({ ok: false, error: message }, { status: 500 });

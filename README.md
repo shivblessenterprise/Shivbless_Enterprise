@@ -67,43 +67,18 @@ Copy `.env.example` to `.env.local` and set:
 NEXT_PUBLIC_SITE_URL=https://yourdomain.com
 NEXT_PUBLIC_CONTACT_EMAIL=shivblessenterprise@gmail.com
 ADMIN_PASSWORD=your-secure-password
+MONGODB_URI=mongodb+srv://USER:PASSWORD@HOST/shivbless?retryWrites=true&w=majority
+MONGODB_DB=shivbless
 ```
 
-## Reliable product + image setup (recommended)
+## Product management
 
-Meesho public site scraping is blocked and breaks often. This site stores your
-catalogue on **your server** so products/images keep working.
+1. Open Admin → `/admin`
+2. **Add New Product** — name, price, photo, Meesho/Flipkart buy link
+3. Photos save to MongoDB (GridFS)
+4. Catalogue saves to MongoDB
 
-### Best workflow (no recurring problems)
-
-1. Open Admin → http://localhost:3000/admin (password in `.env.local`)
-2. Click **Load Meesho Catalogue** (loads your 22 shop products once)
-3. Edit each product → **Upload product photos** (saved to `public/uploads/products`)
-4. Click **Save to Server** (writes `data/catalog.json`)
-
-Or bulk import:
-
-1. Download `/templates/meesho-products-import.csv`
-2. Fill title, price, image, Meesho URL
-3. Admin → **Import CSV / JSON**
-
-### About Meesho Supplier Panel / DevTools
-
-- `sentryReplaySession` in Session Storage is **NOT** an API key
-- Official live sync needs **Settings → API Access** key from Meesho (if enabled)
-- Put key in `.env.local` as `MEESHO_SUPPLIER_API_KEY=...`
-
-## Meesho product sync
-
-Website loads your Meesho shop catalogue (22 products) automatically.
-
-- Admin → **Sync Meesho Products** refreshes the catalogue
-- For **live** API sync from Meesho Supplier Panel, add `MEESHO_SUPPLIER_API_KEY` in `.env.local` (from [supplier.meesho.com](https://supplier.meesho.com) → API Access)
-- Shop URL: https://www.meesho.com/Shivbless89364?ms=2
-
-## Connecting a Real Backend
-
-Product data lives in `src/data/products.json` and is managed via localStorage in the admin panel for demos. Replace `src/lib/products.ts` with Firebase, Supabase, MongoDB, or a custom API when ready.
+Meesho/Flipkart links are for **Buy / Visit shop** only — products are not fetched from Meesho.
 
 ## License
 

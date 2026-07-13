@@ -3,14 +3,10 @@
 import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 import { Maximize2, X, ZoomIn } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, isAppMediaSrc } from "@/lib/utils";
 
 function isLocalImage(src: string) {
-  return (
-    src.startsWith("/uploads") ||
-    src.startsWith("blob:") ||
-    src.startsWith("data:")
-  );
+  return isAppMediaSrc(src) || src.startsWith("data:");
 }
 
 interface PremiumImageZoomProps {

@@ -10,11 +10,11 @@ import { FadeIn } from "@/components/ui/FadeIn";
 import { ProductCardSkeleton } from "@/components/ui/Skeleton";
 import { useProducts } from "@/hooks/useProducts";
 import { siteConfig } from "@/lib/site";
-import { externalLinkProps, formatPrice } from "@/lib/utils";
+import { externalLinkProps, formatPrice, isAppMediaSrc } from "@/lib/utils";
 import type { Product } from "@/types";
 
 function isLocal(src: string) {
-  return src.startsWith("/uploads") || src.startsWith("blob:");
+  return isAppMediaSrc(src);
 }
 
 export function HomePageContent() {

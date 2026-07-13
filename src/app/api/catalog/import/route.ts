@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
+import { saveCatalogProducts } from "@/lib/catalog-db";
 import { siteConfig } from "@/lib/site";
 import { calculateDiscount, slugify } from "@/lib/utils";
 import type { Product } from "@/types";
@@ -53,20 +52,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await mkdir(path.join(process.cwd(), "data"), { recursive: true });
-    await writeFile(
-      path.join(process.cwd(), "data", "catalog.json"),
-      JSON.stringify(
-        {
-          updatedAt: new Date().toISOString(),
-          source: "bulk-import",
-          products,
-        },
-        null,
-        2
-      ),
-      "utf8"
-    );
+    await saveCatalogProducts(products, "bulk-import");
 
     return NextResponse.json({
       ok: true,

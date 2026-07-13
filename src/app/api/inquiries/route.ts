@@ -1,51 +1,29 @@
-import { mkdir, readFile, writeFile } from "fs/promises";
-import path from "path";
 import { NextRequest, NextResponse } from "next/server";
+import {
+  createInquiry,
+  deleteInquiry,
+  listInquiries,
+  updateInquiryStatus,
+  type Inquiry,
+} from "@/lib/inquiries-db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export type Inquiry = {
-  id: string;
-  name: string;
-  email: string;
-  product: string;
-  quantity: string;
-  city: string;
-  message: string;
-  createdAt: string;
-  status: "new" | "read";
-};
-
-const FILE = path.join(process.cwd(), "data", "inquiries.json");
-
-async function readInquiries(): Promise<Inquiry[]> {
-  try {
-    const raw = await readFile(FILE, "utf8");
-    const parsed = JSON.parse(raw) as { inquiries?: Inquiry[] } | Inquiry[];
-    const list = Array.isArray(parsed) ? parsed : parsed.inquiries;
-    return Array.isArray(list) ? list : [];
-  } catch {
-    return [];
-  }
-}
-
-async function writeInquiries(inquiries: Inquiry[]) {
-  await mkdir(path.dirname(FILE), { recursive: true });
-  await writeFile(
-    FILE,
-    JSON.stringify({ updatedAt: new Date().toISOString(), inquiries }, null, 2),
-    "utf8"
-  );
-}
+export type { Inquiry };
 
 export async function GET() {
-  const inquiries = await readInquiries();
-  return NextResponse.json({
-    ok: true,
-    count: inquiries.length,
-    inquiries,
-  });
+  try {
+    const inquiries = await listInquiries();
+    return NextResponse.json({
+      ok: true,
+      count: inquiries.length,
+      inquiries,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Load failed";
+    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -65,21 +43,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const inquiry: Inquiry = {
-      id: `inq-${Date.now()}`,
+    const inquiry = await createInquiry({
       name,
       email,
       product,
       quantity,
       city,
       message,
-      createdAt: new Date().toISOString(),
-      status: "new",
-    };
-
-    const list = await readInquiries();
-    list.unshift(inquiry);
-    await writeInquiries(list);
+    });
 
     return NextResponse.json({
       ok: true,
@@ -98,14 +69,8 @@ export async function PATCH(req: NextRequest) {
     if (!body.id) {
       return NextResponse.json({ ok: false, error: "id required" }, { status: 400 });
     }
-    const list = await readInquiries();
-    const next = list.map((item) =>
-      item.id === body.id
-        ? { ...item, status: body.status || "read" }
-        : item
-    );
-    await writeInquiries(next);
-    return NextResponse.json({ ok: true, inquiries: next });
+    const inquiries = await updateInquiryStatus(body.id, body.status || "read");
+    return NextResponse.json({ ok: true, inquiries });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Update failed";
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
@@ -119,10 +84,8 @@ export async function DELETE(req: NextRequest) {
     if (!id) {
       return NextResponse.json({ ok: false, error: "id required" }, { status: 400 });
     }
-    const list = await readInquiries();
-    const next = list.filter((item) => item.id !== id);
-    await writeInquiries(next);
-    return NextResponse.json({ ok: true, inquiries: next });
+    const inquiries = await deleteInquiry(id);
+    return NextResponse.json({ ok: true, inquiries });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Delete failed";
     return NextResponse.json({ ok: false, error: message }, { status: 500 });

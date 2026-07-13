@@ -1,11 +1,11 @@
-import { buildMeeshoShopProducts } from "@/data/meesho-shop-catalog";
 import type { Product } from "@/types";
 
 /**
- * Default catalogue = live Meesho shop snapshot (22 products).
- * Prefer Sync from Admin to refresh. Connect Supplier API later for live pull.
+ * Fallback seed for client/localStorage only.
+ * Live catalogue comes from MongoDB via Admin (manual add).
+ * Meesho is used only as buy/shop link — not for product sync.
  */
-export const products: Product[] = buildMeeshoShopProducts();
+export const products: Product[] = [];
 
 /** PLACEHOLDER testimonials — replace with real customer feedback */
 export const testimonials = [

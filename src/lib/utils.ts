@@ -34,3 +34,13 @@ export function externalLinkProps(url: string) {
     rel: "noopener noreferrer" as const,
   };
 }
+
+/** Local upload, MongoDB GridFS media, or browser blob — skip next/image remote optimize */
+export function isAppMediaSrc(src?: string | null): boolean {
+  if (!src) return false;
+  return (
+    src.startsWith("/uploads") ||
+    src.startsWith("/api/media/") ||
+    src.startsWith("blob:")
+  );
+}

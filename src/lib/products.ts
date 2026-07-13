@@ -9,7 +9,6 @@ import type {
 } from "@/types";
 
 const STORAGE_KEY = "shivbless_products_v3";
-const SYNC_META_KEY = "shivbless_meesho_sync_meta";
 
 function isBrowser(): boolean {
   return typeof window !== "undefined";
@@ -35,31 +34,6 @@ export function loadProducts(): Product[] {
 export function saveProducts(items: Product[]): void {
   if (!isBrowser()) return;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-}
-
-export function applySyncedProducts(
-  items: Product[],
-  meta?: { version: string; source: string; syncedAt: string }
-): Product[] {
-  saveProducts(items);
-  if (isBrowser() && meta) {
-    localStorage.setItem(SYNC_META_KEY, JSON.stringify(meta));
-  }
-  return items;
-}
-
-export function getSyncMeta(): {
-  version?: string;
-  source?: string;
-  syncedAt?: string;
-} | null {
-  if (!isBrowser()) return null;
-  try {
-    const raw = localStorage.getItem(SYNC_META_KEY);
-    return raw ? (JSON.parse(raw) as { version?: string; source?: string; syncedAt?: string }) : null;
-  } catch {
-    return null;
-  }
 }
 
 export function resetProducts(): Product[] {
