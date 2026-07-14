@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { uploadBufferToGridFS } from "@/lib/media-db";
+import { explainMongoError } from "@/lib/mongodb";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -44,7 +45,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, url: stored.url, id: stored.id });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Upload failed";
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: explainMongoError(error) },
+      { status: 500 }
+    );
   }
 }

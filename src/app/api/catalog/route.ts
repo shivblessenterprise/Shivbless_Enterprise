@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCatalogProducts, saveCatalogProducts } from "@/lib/catalog-db";
+import { explainMongoError } from "@/lib/mongodb";
 import type { Product } from "@/types";
 
 export const runtime = "nodejs";
@@ -14,8 +15,10 @@ export async function GET() {
       products,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Catalog load failed";
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: explainMongoError(error) },
+      { status: 500 }
+    );
   }
 }
 
@@ -41,7 +44,9 @@ export async function PUT(req: NextRequest) {
       message: "Catalogue saved to MongoDB. Website will use these products.",
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Save failed";
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: explainMongoError(error) },
+      { status: 500 }
+    );
   }
 }
