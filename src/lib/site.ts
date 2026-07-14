@@ -13,7 +13,6 @@ export const siteConfig: SiteConfig = {
   social: {
     instagram: "https://instagram.com",
     facebook: "https://facebook.com",
-    youtube: "https://youtube.com",
   },
 };
 

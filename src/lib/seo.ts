@@ -57,7 +57,6 @@ export function organizationSchema() {
     sameAs: [
       siteConfig.social.instagram,
       siteConfig.social.facebook,
-      siteConfig.social.youtube,
       siteConfig.meeshoStoreUrl,
       siteConfig.flipkartStoreUrl,
     ].filter(Boolean),

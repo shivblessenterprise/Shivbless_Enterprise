@@ -87,6 +87,5 @@ export interface SiteConfig {
   social: {
     instagram?: string;
     facebook?: string;
-    youtube?: string;
   };
 }

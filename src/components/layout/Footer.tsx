@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Facebook, Instagram, Mail, Youtube } from "lucide-react";
+import { Facebook, Instagram, Mail } from "lucide-react";
 import { Logo } from "@/components/layout/Logo";
 import { siteConfig } from "@/lib/site";
 import { externalLinkProps } from "@/lib/utils";
@@ -54,15 +54,6 @@ export function Footer() {
                   className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-ink-800 text-ink-300 transition hover:border-brand-500 hover:text-brand-300 focus-ring"
                 >
                   <Facebook className="h-4 w-4" />
-                </a>
-              )}
-              {siteConfig.social.youtube && (
-                <a
-                  {...externalLinkProps(siteConfig.social.youtube)}
-                  aria-label="YouTube"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-ink-800 text-ink-300 transition hover:border-brand-500 hover:text-brand-300 focus-ring"
-                >
-                  <Youtube className="h-4 w-4" />
                 </a>
               )}
             </div>
