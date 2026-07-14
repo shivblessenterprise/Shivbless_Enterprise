@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getMediaMeta, openMediaDownload } from "@/lib/media-db";
+import { getMediaContentType, getMediaMeta, openMediaDownload } from "@/lib/media-db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,6 +15,10 @@ export async function GET(_req: NextRequest, { params }: Params) {
     }
 
     const meta = await getMediaMeta(id);
+    if (!meta) {
+      return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
+    }
+
     const download = opened.bucket.openDownloadStream(opened.fileId);
     const chunks: Buffer[] = [];
 
@@ -25,8 +29,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
     });
 
     const buffer = Buffer.concat(chunks);
-    const contentType =
-      (meta?.contentType as string | undefined) || "application/octet-stream";
+    const contentType = getMediaContentType(meta);
 
     return new NextResponse(buffer, {
       status: 200,

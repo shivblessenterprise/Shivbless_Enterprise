@@ -21,7 +21,7 @@ export async function listInquiries(): Promise<Inquiry[]> {
     .find({})
     .sort({ createdAt: -1 })
     .toArray();
-  return rows.map(({ _id, ...rest }) => rest);
+  return rows.map(({ _id: _ignored, ...rest }) => rest);
 }
 
 export async function createInquiry(
@@ -37,7 +37,7 @@ export async function createInquiry(
   };
   doc.id = doc._id;
   await db.collection<InquiryDoc>("inquiries").insertOne(doc);
-  const { _id, ...rest } = doc;
+  const { _id: _ignored, ...rest } = doc;
   return rest;
 }
 
@@ -46,12 +46,12 @@ export async function updateInquiryStatus(
   status: "new" | "read"
 ): Promise<Inquiry[]> {
   const db = await getDb();
-  await db.collection("inquiries").updateOne({ _id: id }, { $set: { status } });
+  await db.collection<InquiryDoc>("inquiries").updateOne({ _id: id }, { $set: { status } });
   return listInquiries();
 }
 
 export async function deleteInquiry(id: string): Promise<Inquiry[]> {
   const db = await getDb();
-  await db.collection("inquiries").deleteOne({ _id: id });
+  await db.collection<InquiryDoc>("inquiries").deleteOne({ _id: id });
   return listInquiries();
 }
