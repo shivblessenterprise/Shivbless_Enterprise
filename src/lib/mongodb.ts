@@ -22,6 +22,19 @@ function createClient(): MongoClient {
   });
 }
 
+function connectClient(): Promise<MongoClient> {
+  const promise = createClient()
+    .connect()
+    .catch((error) => {
+      // Do not keep a rejected promise cached forever after IP/network fixes.
+      global._mongoClientPromise = undefined;
+      throw error;
+    });
+
+  global._mongoClientPromise = promise;
+  return promise;
+}
+
 export function explainMongoError(error: unknown): string {
   const message = error instanceof Error ? error.message : String(error);
   if (
@@ -39,12 +52,8 @@ export function explainMongoError(error: unknown): string {
   return message;
 }
 
-const clientPromise =
-  global._mongoClientPromise ??
-  (global._mongoClientPromise = createClient().connect());
-
 export async function getMongoClient(): Promise<MongoClient> {
-  return clientPromise;
+  return global._mongoClientPromise ?? connectClient();
 }
 
 export async function getDb(): Promise<Db> {
